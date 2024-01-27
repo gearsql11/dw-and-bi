@@ -2,6 +2,6 @@
 
 # data warehouse and business intelligent
 
-## Heading 2
+## I wanna removed some text , This code in pages 
 
 ### Heading 3
