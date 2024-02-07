@@ -15,6 +15,9 @@ Steps
 1) docker-compose up
 2) python create_tables.py
 3) python etl.py
+
+
+## H2
 Tables
 Actors
 Attribute	Data Type	Note
@@ -32,7 +35,5 @@ Attribute	Data Type	Note
 id	int	
 name	text	
 event_id	text	(foreign key)
-
-## H2
 
 ### H3
