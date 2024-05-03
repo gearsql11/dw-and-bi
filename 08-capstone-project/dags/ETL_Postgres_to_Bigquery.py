@@ -38,7 +38,10 @@ def _create_tables():
         print(each)
 
 
-
+# changes dbname
+# changes user
+# changes password
+# changes host
 def _neon_to_rainfall_csv():
     # เชื่อมต่อกับฐานข้อมูล Neon Postgres
     conn = psycopg2.connect(
@@ -70,6 +73,11 @@ def _neon_to_rainfall_csv():
 
 def _neon_to_province_csv():
     # เชื่อมต่อกับฐานข้อมูล Neon Postgres
+
+# changes dbname
+# changes user
+# changes password
+# changes host
     conn = psycopg2.connect(
         dbname="rainfall",
         user="rainfall_owner",
@@ -128,7 +136,9 @@ def _main_rainfall(dataset_id, table_id, file_path):
     # ทำได้โดยการเซตค่า Environement Variable ที่ชื่อ KEYFILE_PATH ได้ จะทำให้เวลาที่เราปรับ
     # เปลี่ยน File Path เราจะได้ไม่ต้องกลับมาแก้โค้ด
     # keyfile = os.environ.get("KEYFILE_PATH")
-    #
+
+
+# changes keyfile
     # แต่เพื่อความง่ายเราสามารถกำหนด File Path ไปได้เลยตรง ๆ
     keyfile = "/opt/airflow/dags/project-pipeline-ds525-neon-to-bigquery-26d2169ea978.json"
     service_account_info = json.load(open(keyfile))
@@ -136,6 +146,8 @@ def _main_rainfall(dataset_id, table_id, file_path):
 
     # โค้ดส่วนนี้จะเป็นการสร้าง Client เชื่อมต่อไปยังโปรเจค GCP ของเรา โดยใช้ Credentials ที่
     # สร้างจากโค้ดข้างต้น
+
+# changes project_id
     project_id = "project-pipeline-ds525"
     client = bigquery.Client(
         project=project_id,
@@ -228,7 +240,8 @@ def _main_province(dataset_id, table_id, file_path):
     # ทำได้โดยการเซตค่า Environement Variable ที่ชื่อ KEYFILE_PATH ได้ จะทำให้เวลาที่เราปรับ
     # เปลี่ยน File Path เราจะได้ไม่ต้องกลับมาแก้โค้ด
     # keyfile = os.environ.get("KEYFILE_PATH")
-    #
+
+# changes keyfile
     # แต่เพื่อความง่ายเราสามารถกำหนด File Path ไปได้เลยตรง ๆ
     keyfile = "/opt/airflow/dags/project-pipeline-ds525-neon-to-bigquery-26d2169ea978.json"
     service_account_info = json.load(open(keyfile))
@@ -236,6 +249,8 @@ def _main_province(dataset_id, table_id, file_path):
 
     # โค้ดส่วนนี้จะเป็นการสร้าง Client เชื่อมต่อไปยังโปรเจค GCP ของเรา โดยใช้ Credentials ที่
     # สร้างจากโค้ดข้างต้น
+
+# changes project_id
     project_id = "project-pipeline-ds525"
     client = bigquery.Client(
         project=project_id,
