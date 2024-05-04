@@ -27,7 +27,7 @@ from typing import List      #เพื่อให้เราสามาร�
 
 
 def _create_tables():
-    hook = PostgresHook(postgres_conn_id="neon_conn")
+    hook = PostgresHook(postgres_conn_id="neon_conn")  #ใช้ PostgresHook เพื่อเชื่อมต่อกับฐานข้อมูล PostgreSQL
     conn = hook.get_conn()
     cur = conn.cursor()
 
@@ -69,6 +69,7 @@ def _neon_to_rainfall_csv():
         writer = csv.writer(csv_file_rainfall)
         writer.writerow([i[0] for i in cur.description])  # เขียนหัว column
         writer.writerows(rows)  # เขียนข้อมูล
+
 
 
 def _neon_to_province_csv():
@@ -412,6 +413,8 @@ with DAG(
     )
 
 
+# op_kwargs เป็นพารามิเตอร์ที่ใช้ส่งค่าเข้าไปยังฟังก์ชัน _main_rainfall 
+# ประกอบด้วย dataset_id, table_id, และ file_path ที่ต้องการใช้ในการโหลดข้อมูลไปยัง BigQuery
     csv_neon_to_rainfall_bq = PythonOperator(
         task_id="csv_neon_to_rainfall_bq",
         python_callable=_main_rainfall,
@@ -420,7 +423,7 @@ with DAG(
         "table_id": "rainfall",
         "file_path": "rainfall.csv"
     },
-    dag=dag,
+    dag=dag,    #DAG object ที่เรากำลังสร้างเพื่อเรียกใช้งาน PythonOperator นี้
 )
 
 
@@ -438,4 +441,4 @@ with DAG(
     end = EmptyOperator(task_id="end")
 
 
-    start >> create_tables >> neon_to_rainfall_csv >> neon_to_province_csv >> get_files_csv_neon >> csv_neon_to_rainfall_bq >> csv_neon_to_province_bq >> end
+    start >> create_tables >> [neon_to_rainfall_csv,neon_to_province_csv] >> get_files_csv_neon >> [csv_neon_to_rainfall_bq,csv_neon_to_province_bq] >> end
