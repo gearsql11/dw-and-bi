@@ -56,7 +56,7 @@ def _neon_to_rainfall_csv():
     cur = conn.cursor()
 
     # สร้างคำสั่ง SQL เพื่อดึงข้อมูล
-    sql_query = "SELECT id, provinceid, minrain, maxrain, avgrain, region, year, month FROM rainfall;"
+    sql_query = "SELECT id, provinceid, minrain, maxrain, avgrain, region, year, month, date FROM rainfall;"
     
     # ทำคำสั่ง SQL
     cur.execute(sql_query)
@@ -172,10 +172,16 @@ def _main_rainfall(dataset_id, table_id, file_path):
             bigquery.SchemaField("region", bigquery.SqlTypeNames.STRING),
             bigquery.SchemaField("year", bigquery.SqlTypeNames.STRING),
             bigquery.SchemaField("month", bigquery.SqlTypeNames.STRING),
-            # bigquery.SchemaField("date", bigquery.SqlTypeNames.DATE),
+            bigquery.SchemaField("date", bigquery.SqlTypeNames.DATE),
             # bigquery.SchemaField("month_th", bigquery.SqlTypeNames.STRING),
         ],
+        # Clustering by date
+        time_partitioning=bigquery.TimePartitioning(
+        type_=bigquery.TimePartitioningType.DAY,
+        field="date"
     )
+)
+
 
     # โค้ดส่วนนี้จะเป็นการอ่านไฟล์ CSV และโหลดขึ้นไปยัง BigQuery
     with open("/opt/airflow/dags/rainfall.csv", "rb") as f:
@@ -210,6 +216,7 @@ if __name__ == "__main__":             #เป็นการตรวจสอ�
             "region",
             "year",
             "month",
+            "date",
         ])
 
         for datafile in all_files:
@@ -225,6 +232,7 @@ if __name__ == "__main__":             #เป็นการตรวจสอ�
                         each["region"],
                         each["year"], 
                         each["month"],
+                        each["date"],
                     ])
 
     main(dataset_id="rainfall_Bigquery", table_id="rainfall", file_path="rainfall.csv")
