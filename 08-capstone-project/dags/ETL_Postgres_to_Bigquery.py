@@ -175,7 +175,7 @@ def _main_rainfall(dataset_id, table_id, file_path):
             bigquery.SchemaField("date", bigquery.SqlTypeNames.DATE),
             # bigquery.SchemaField("month_th", bigquery.SqlTypeNames.STRING),
         ],
-        # Clustering by date
+        # partition by date
         time_partitioning=bigquery.TimePartitioning(
         type_=bigquery.TimePartitioningType.DAY,
         field="date"
